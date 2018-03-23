@@ -8,12 +8,12 @@ contract('TokenSender', function(accounts) {
 
   it("go throught the process", async function() {
     var token = await TestToken.new('tt', 'tt', 18, {from: owner})
-    var tokenSender = await TokenSender.new(token.address, {from: owner})
+    var tokenSender = await TokenSender.new({from: owner})
 
-    await token.transfer(tokenSender.address, 100000000, {from: owner})
+    await token.approve(tokenSender.address, 100000000, {from: owner})
     var addresses = [user1, user2]
     var amount = [200000, 300000]
-    await tokenSender.bulkTransfer(addresses, amount, {from: owner})
+    await tokenSender.bulkTransfer(addresses, amount, token.address, {from: owner})
     var balance1 = await token.balanceOf.call(user1)
     var balance2 = await token.balanceOf.call(user2)
 
